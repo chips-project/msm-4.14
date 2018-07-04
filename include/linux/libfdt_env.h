@@ -2,7 +2,6 @@
 #ifndef _LIBFDT_ENV_H
 #define _LIBFDT_ENV_H
 
-#include <linux/kernel.h>
 #include <linux/string.h>
 
 #include <asm/byteorder.h>
