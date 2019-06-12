@@ -60,7 +60,7 @@ struct vib_ldo_chip {
 	int			vmax_uV;
 	int			overdrive_volt_uV;
 	int			ldo_uV;
-	int			state;
+	atomic_t		state;
 	u64			vib_play_ms;
 	bool			vib_enabled;
 	bool			disable_overdrive;
@@ -185,7 +185,7 @@ static void qpnp_vib_work(struct work_struct *work)
 						vib_work);
 	int ret = 0;
 
-	if (chip->state) {
+	if (atomic_read(&chip->state)) {
 		if (!chip->vib_enabled)
 			ret = qpnp_vibrator_play_on(chip);
 
@@ -207,7 +207,7 @@ static enum hrtimer_restart vib_stop_timer(struct hrtimer *timer)
 	struct vib_ldo_chip *chip = container_of(timer, struct vib_ldo_chip,
 					     stop_timer);
 
-	chip->state = 0;
+	atomic_set(&chip->state, 0);
 	schedule_work(&chip->vib_work);
 	return HRTIMER_NORESTART;
 }
@@ -335,9 +335,9 @@ static ssize_t qpnp_vib_store_activate(struct device *dev,
 
 	mutex_lock(&chip->lock);
 	hrtimer_cancel(&chip->stop_timer);
-	chip->state = val;
-	pr_debug("state = %d, time = %llums\n", chip->state, chip->vib_play_ms);
 	mutex_unlock(&chip->lock);
+	atomic_set(&chip->state, val);
+	pr_debug("state = %d, time = %llums\n", atomic_read(&chip->state), chip->vib_play_ms);
 	schedule_work(&chip->vib_work);
 
 	return count;
