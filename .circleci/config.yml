@@ -11,17 +11,6 @@ jobs:
       - run: wget https://raw.githubusercontent.com/najahiiii/Noob-Script/noob/ci/circle/sendInfo
       - run: chmod +x sendInfo
       - run: bash sendInfo
-  do_testSendInfo:
-    docker:
-      - image: najahi/oven:latest
-    environment:
-      is_test: true
-    steps:
-      - run: git clone https://github.com/chips-project/msm-4.14 --depth=1 -b pie-miui .
-      - run: echo 'export device="<b>Xiaomi Redmi Note 8</b> (Ginkgo) Android 9.0/Pie"' >> $BASH_ENV
-      - run: wget https://raw.githubusercontent.com/najahiiii/Noob-Script/noob/ci/circle/sendInfo
-      - run: chmod +x sendInfo
-      - run: bash sendInfo
   do_Bake1:
     docker:
       - image: najahi/oven:latest
@@ -33,32 +22,9 @@ jobs:
       - run: wget https://raw.githubusercontent.com/najahiiii/Noob-Script/noob/ci/circle/do_ginkgo
       - run: chmod +x do_ginkgo
       - run: bash do_ginkgo
-  do_testBake1:
-    docker:
-      - image: najahi/oven:latest
-    working_directory: ~/do_Bake1
-    environment:
-      is_test: true
-    steps:
-      - run: git clone https://github.com/chips-project/msm-4.14 --depth=1 -b pie-miui .
-      - run: wget https://raw.githubusercontent.com/najahiiii/Noob-Script/noob/ci/circle/do_ginkgo
-      - run: chmod +x do_ginkgo
-      - run: bash do_ginkgo
 workflows:
   version: 2
   Continuous-HotOven:
-    jobs:
-      - do_testSendInfo
-      - do_testBake1:
-          requires:
-            - do_testSendInfo
-  Weekly-HotOven:
-    triggers:
-      - schedule:
-          cron: "0 0 * * 0"
-          filters:
-            branches:
-              only: pie-miui
     jobs:
       - do_SendInfo
       - do_Bake1:
