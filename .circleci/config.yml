@@ -2,7 +2,7 @@ version: 2
 jobs:
   do_SendInfo:
     docker:
-      - image: najahi/oven:latest
+      - image: najahi/oven:fedora
     environment:
       is_test: false
     steps:
@@ -13,7 +13,7 @@ jobs:
       - run: bash sendInfo
   do_Bake1:
     docker:
-      - image: najahi/oven:latest
+      - image: najahi/oven:fedora
     working_directory: ~/do_Bake1
     environment:
       is_test: false
