@@ -17,6 +17,8 @@
  *
  */
 
+#define pr_fmt(fmt)	"nt36xxx_ext_proc: %s: " fmt, __func__
+
 #include <linux/proc_fs.h>
 #include <linux/seq_file.h>
 
@@ -102,7 +104,7 @@ uint8_t nvt_get_fw_pipe(void)
 	buf[1] = 0x00;
 	CTP_SPI_READ(ts->client, buf, 2);
 
-	//NVT_LOG("FW pipe=%d, buf[1]=0x%02X\n", (buf[1]&0x01), buf[1]);
+	//pr_info("FW pipe=%d, buf[1]=0x%02X\n", (buf[1]&0x01), buf[1]);
 
 	return (buf[1] & 0x01);
 }
@@ -333,8 +335,6 @@ static int32_t nvt_fw_version_open(struct inode *inode, struct file *file)
 		return -ERESTARTSYS;
 	}
 
-	NVT_LOG("++\n");
-
 #if NVT_TOUCH_ESD_PROTECT
 	nvt_esd_check_enable(false);
 #endif /* #if NVT_TOUCH_ESD_PROTECT */
@@ -345,8 +345,6 @@ static int32_t nvt_fw_version_open(struct inode *inode, struct file *file)
 	}
 
 	mutex_unlock(&ts->lock);
-
-	NVT_LOG("--\n");
 
 	return seq_open(file, &nvt_fw_version_seq_ops);
 }
@@ -371,8 +369,6 @@ static int32_t nvt_baseline_open(struct inode *inode, struct file *file)
 	if (mutex_lock_interruptible(&ts->lock)) {
 		return -ERESTARTSYS;
 	}
-
-	NVT_LOG("++\n");
 
 #if NVT_TOUCH_ESD_PROTECT
 	nvt_esd_check_enable(false);
@@ -401,8 +397,6 @@ static int32_t nvt_baseline_open(struct inode *inode, struct file *file)
 
 	mutex_unlock(&ts->lock);
 
-	NVT_LOG("--\n");
-
 	return seq_open(file, &nvt_seq_ops);
 }
 
@@ -426,8 +420,6 @@ static int32_t nvt_raw_open(struct inode *inode, struct file *file)
 	if (mutex_lock_interruptible(&ts->lock)) {
 		return -ERESTARTSYS;
 	}
-
-	NVT_LOG("++\n");
 
 #if NVT_TOUCH_ESD_PROTECT
 	nvt_esd_check_enable(false);
@@ -461,8 +453,6 @@ static int32_t nvt_raw_open(struct inode *inode, struct file *file)
 
 	mutex_unlock(&ts->lock);
 
-	NVT_LOG("--\n");
-
 	return seq_open(file, &nvt_seq_ops);
 }
 
@@ -486,8 +476,6 @@ static int32_t nvt_diff_open(struct inode *inode, struct file *file)
 	if (mutex_lock_interruptible(&ts->lock)) {
 		return -ERESTARTSYS;
 	}
-
-	NVT_LOG("++\n");
 
 #if NVT_TOUCH_ESD_PROTECT
 	nvt_esd_check_enable(false);
@@ -521,8 +509,6 @@ static int32_t nvt_diff_open(struct inode *inode, struct file *file)
 
 	mutex_unlock(&ts->lock);
 
-	NVT_LOG("--\n");
-
 	return seq_open(file, &nvt_seq_ops);
 }
 
@@ -554,8 +540,6 @@ static int32_t nvt_xiaomi_config_info_open(struct inode *inode,
 		return -ERESTARTSYS;
 	}
 
-	NVT_LOG("++\n");
-
 #if NVT_TOUCH_ESD_PROTECT
 	nvt_esd_check_enable(false);
 #endif /* #if NVT_TOUCH_ESD_PROTECT */
@@ -574,8 +558,6 @@ static int32_t nvt_xiaomi_config_info_open(struct inode *inode,
 		 ((uint64_t)buf[7] << 8) | (uint64_t)buf[8]);
 
 	mutex_unlock(&ts->lock);
-
-	NVT_LOG("--\n");
 
 	return single_open(file, nvt_xiaomi_config_info_show, NULL);
 }
@@ -807,8 +789,6 @@ static int32_t lct_tp_data_dump_open(struct inode *inode, struct file *file)
 		return -ERESTARTSYS;
 	}
 
-	NVT_LOG("++\n");
-
 #if NVT_TOUCH_ESD_PROTECT
 	nvt_esd_check_enable(false);
 #endif /* #if NVT_TOUCH_ESD_PROTECT */
@@ -848,8 +828,6 @@ static int32_t lct_tp_data_dump_open(struct inode *inode, struct file *file)
 
 	mutex_unlock(&ts->lock);
 
-	NVT_LOG("--\n");
-
 	return seq_open(file, &lct_tp_data_dump_seq_ops);
 }
 
@@ -874,54 +852,54 @@ int32_t nvt_extra_proc_init(void)
 	NVT_proc_fw_version_entry =
 		proc_create(NVT_FW_VERSION, 0444, NULL, &nvt_fw_version_fops);
 	if (NVT_proc_fw_version_entry == NULL) {
-		NVT_ERR("create proc/%s Failed!\n", NVT_FW_VERSION);
+		pr_err("create proc/%s Failed!\n", NVT_FW_VERSION);
 		return -ENOMEM;
 	} else {
-		NVT_LOG("create proc/%s Succeeded!\n", NVT_FW_VERSION);
+		pr_info("create proc/%s Succeeded!\n", NVT_FW_VERSION);
 	}
 
 	NVT_proc_baseline_entry =
 		proc_create(NVT_BASELINE, 0444, NULL, &nvt_baseline_fops);
 	if (NVT_proc_baseline_entry == NULL) {
-		NVT_ERR("create proc/%s Failed!\n", NVT_BASELINE);
+		pr_err("create proc/%s Failed!\n", NVT_BASELINE);
 		return -ENOMEM;
 	} else {
-		NVT_LOG("create proc/%s Succeeded!\n", NVT_BASELINE);
+		pr_info("create proc/%s Succeeded!\n", NVT_BASELINE);
 	}
 
 	NVT_proc_raw_entry = proc_create(NVT_RAW, 0444, NULL, &nvt_raw_fops);
 	if (NVT_proc_raw_entry == NULL) {
-		NVT_ERR("create proc/%s Failed!\n", NVT_RAW);
+		pr_err("create proc/%s Failed!\n", NVT_RAW);
 		return -ENOMEM;
 	} else {
-		NVT_LOG("create proc/%s Succeeded!\n", NVT_RAW);
+		pr_info("create proc/%s Succeeded!\n", NVT_RAW);
 	}
 
 	NVT_proc_diff_entry = proc_create(NVT_DIFF, 0444, NULL, &nvt_diff_fops);
 	if (NVT_proc_diff_entry == NULL) {
-		NVT_ERR("create proc/%s Failed!\n", NVT_DIFF);
+		pr_err("create proc/%s Failed!\n", NVT_DIFF);
 		return -ENOMEM;
 	} else {
-		NVT_LOG("create proc/%s Succeeded!\n", NVT_DIFF);
+		pr_info("create proc/%s Succeeded!\n", NVT_DIFF);
 	}
 
 	NVT_proc_xiaomi_config_info_entry =
 		proc_create(NVT_XIAOMI_CONFIG_INFO, 0444, NULL,
 			    &nvt_xiaomi_config_info_fops);
 	if (NVT_proc_xiaomi_config_info_entry == NULL) {
-		NVT_ERR("create proc/%s Failed!\n", NVT_XIAOMI_CONFIG_INFO);
+		pr_err("create proc/%s Failed!\n", NVT_XIAOMI_CONFIG_INFO);
 		return -ENOMEM;
 	} else {
-		NVT_LOG("create proc/%s Succeeded!\n", NVT_XIAOMI_CONFIG_INFO);
+		pr_info("create proc/%s Succeeded!\n", NVT_XIAOMI_CONFIG_INFO);
 	}
 
 	LCT_proc_tp_data_dump_entry = proc_create(LCT_TP_DATA_DUMP, 0444, NULL,
 						  &lct_tp_data_dump_fops);
 	if (LCT_proc_tp_data_dump_entry == NULL) {
-		NVT_ERR("create proc/%s Failed!\n", LCT_TP_DATA_DUMP);
+		pr_err("create proc/%s Failed!\n", LCT_TP_DATA_DUMP);
 		return -ENOMEM;
 	} else {
-		NVT_LOG("create proc/%s Succeeded!\n", LCT_TP_DATA_DUMP);
+		pr_info("create proc/%s Succeeded!\n", LCT_TP_DATA_DUMP);
 	}
 
 	return 0;
@@ -940,37 +918,37 @@ void nvt_extra_proc_deinit(void)
 	if (NVT_proc_fw_version_entry != NULL) {
 		remove_proc_entry(NVT_FW_VERSION, NULL);
 		NVT_proc_fw_version_entry = NULL;
-		NVT_LOG("Removed /proc/%s\n", NVT_FW_VERSION);
+		pr_info("Removed /proc/%s\n", NVT_FW_VERSION);
 	}
 
 	if (NVT_proc_baseline_entry != NULL) {
 		remove_proc_entry(NVT_BASELINE, NULL);
 		NVT_proc_baseline_entry = NULL;
-		NVT_LOG("Removed /proc/%s\n", NVT_BASELINE);
+		pr_info("Removed /proc/%s\n", NVT_BASELINE);
 	}
 
 	if (NVT_proc_raw_entry != NULL) {
 		remove_proc_entry(NVT_RAW, NULL);
 		NVT_proc_raw_entry = NULL;
-		NVT_LOG("Removed /proc/%s\n", NVT_RAW);
+		pr_info("Removed /proc/%s\n", NVT_RAW);
 	}
 
 	if (NVT_proc_diff_entry != NULL) {
 		remove_proc_entry(NVT_DIFF, NULL);
 		NVT_proc_diff_entry = NULL;
-		NVT_LOG("Removed /proc/%s\n", NVT_DIFF);
+		pr_info("Removed /proc/%s\n", NVT_DIFF);
 	}
 
 	if (NVT_proc_xiaomi_config_info_entry != NULL) {
 		remove_proc_entry(NVT_XIAOMI_CONFIG_INFO, NULL);
 		NVT_proc_xiaomi_config_info_entry = NULL;
-		NVT_LOG("Removed /proc/%s\n", NVT_XIAOMI_CONFIG_INFO);
+		pr_info("Removed /proc/%s\n", NVT_XIAOMI_CONFIG_INFO);
 	}
 
 	if (LCT_proc_tp_data_dump_entry != NULL) {
 		remove_proc_entry(LCT_TP_DATA_DUMP, NULL);
 		LCT_proc_tp_data_dump_entry = NULL;
-		NVT_LOG("Removed /proc/%s\n", LCT_TP_DATA_DUMP);
+		pr_info("Removed /proc/%s\n", LCT_TP_DATA_DUMP);
 	}
 }
 #endif
