@@ -69,14 +69,14 @@ static int32_t nvt_get_fw_need_write_size(const struct firmware *fw_entry)
 		/* check if there is end flag "NVT" at the end of this sector */
 		if (strncmp(&fw_entry->data[i * FLASH_SECTOR_SIZE - NVT_FLASH_END_FLAG_LEN], "NVT", NVT_FLASH_END_FLAG_LEN) == 0) {
 			fw_need_write_size = i * FLASH_SECTOR_SIZE;
-			pr_info("fw_need_write_size = %zu(0x%zx), NVT end flag\n", fw_need_write_size, fw_need_write_size);
+			pr_info_once("fw_need_write_size = %zu(0x%zx), NVT end flag\n", fw_need_write_size, fw_need_write_size);
 			return 0;
 		}
 
 		/* check if there is end flag "MOD" at the end of this sector */
 		if (strncmp(&fw_entry->data[i * FLASH_SECTOR_SIZE - NVT_FLASH_END_FLAG_LEN], "MOD", NVT_FLASH_END_FLAG_LEN) == 0) {
 			fw_need_write_size = i * FLASH_SECTOR_SIZE;
-			pr_info("fw_need_write_size = %zu(0x%zx), MOD end flag\n", fw_need_write_size, fw_need_write_size);
+			pr_info_once("fw_need_write_size = %zu(0x%zx), MOD end flag\n", fw_need_write_size, fw_need_write_size);
 			return 0;
 		}
 	}
@@ -175,7 +175,7 @@ static int32_t nvt_bin_header_parser(const u8 *fwdata, size_t fwsize)
 	 * ilm_dlm_num (ILM & DLM) + ovly_sec_num + info_sec_num
 	 */
 	partition = ilm_dlm_num + ovly_sec_num + info_sec_num;
-	pr_info("ovly_info = %d, ilm_dlm_num = %d, ovly_sec_num = %d, info_sec_num = %d, partition = %d\n",
+	pr_info_once("ovly_info = %d, ilm_dlm_num = %d, ovly_sec_num = %d, info_sec_num = %d, partition = %d\n",
 			ovly_info, ilm_dlm_num, ovly_sec_num, info_sec_num, partition);
 
 	/* allocated memory for header info */
@@ -312,7 +312,7 @@ static int32_t update_firmware_request(char *filename)
 		return -ENOENT;
 
 	while (1) {
-		pr_info("filename is %s\n", filename);
+		pr_info_once("filename is %s\n", filename);
 
 		ret = request_firmware(&fw_entry, filename, &ts->client->dev);
 		if (ret) {
@@ -903,7 +903,7 @@ int32_t nvt_update_firmware(char *firmware_name)
 		goto download_fail;
 	}
 
-	pr_info("Update firmware success! <%ld us>\n",
+	pr_info_once("Update firmware success! <%ld us>\n",
 			(end.tv_sec - start.tv_sec)*1000000L + (end.tv_usec - start.tv_usec));
 
 	/* Get FW Info */
