@@ -4144,8 +4144,10 @@ retry:
 	if (current->flags & PF_MEMALLOC)
 		goto nopage;
 
-	if (fatal_signal_pending(current) && !(gfp_mask & __GFP_NOFAIL))
+	if (fatal_signal_pending(current) && !(gfp_mask & __GFP_NOFAIL)) {
+		gfp_mask |= __GFP_NOWARN;
 		goto nopage;
+	}
 
 	/* Try direct reclaim and then allocating */
 	page = __alloc_pages_direct_reclaim(gfp_mask, order, alloc_flags, ac,
