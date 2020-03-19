@@ -688,10 +688,12 @@ static int goodix_fb_state_chg_callback(struct notifier_block *nb,
 		return 0;
 	pr_info("[info] %s go to the goodix_fb_state_chg_callback value = %d\n",
 			__func__, (int)val);
+
 	gf_dev = container_of(nb, struct gf_dev, notifier);
-	if (evdata && evdata->data && val == MSM_DRM_EVENT_BLANK && gf_dev) {
+	if (evdata && evdata->data && gf_dev) {
 		blank = evdata->data;
-		if (gf_dev->device_available == 1 && *blank == MSM_DRM_BLANK_UNBLANK) {
+		if (val == MSM_DRM_EVENT_BLANK) {
+			if (gf_dev->device_available == 1 && *blank == MSM_DRM_BLANK_UNBLANK) {
 				gf_dev->fb_black = 0;
 #if defined(GF_NETLINK_ENABLE)
 				msg = GF_NET_EVENT_FB_UNBLACK;
@@ -701,21 +703,19 @@ static int goodix_fb_state_chg_callback(struct notifier_block *nb,
 					kill_fasync(&gf_dev->async, SIGIO, POLL_IN);
 #endif
 			}
-
-	}else if(evdata && evdata->data && val == MSM_DRM_EARLY_EVENT_BLANK && gf_dev){
-		blank = evdata->data;
-			if (gf_dev->device_available == 1 && *blank == MSM_DRM_BLANK_POWERDOWN) {
-				gf_dev->fb_black = 1;
-				gf_dev->wait_finger_down = true;
+		} else if (val == MSM_DRM_EARLY_EVENT_BLANK) {
+				if (gf_dev->device_available == 1 && *blank == MSM_DRM_BLANK_POWERDOWN) {
+					gf_dev->fb_black = 1;
+					gf_dev->wait_finger_down = true;
 #if defined(GF_NETLINK_ENABLE)
-				msg = GF_NET_EVENT_FB_BLACK;
-				sendnlmsg(&msg);
+					msg = GF_NET_EVENT_FB_BLACK;
+					sendnlmsg(&msg);
 #elif defined(GF_FASYNC)
-				if (gf_dev->async)
-					kill_fasync(&gf_dev->async, SIGIO, POLL_IN);
+					if (gf_dev->async)
+						kill_fasync(&gf_dev->async, SIGIO, POLL_IN);
 #endif
-			}
-
+				}
+		}
 	}
 	return NOTIFY_OK;
 }
