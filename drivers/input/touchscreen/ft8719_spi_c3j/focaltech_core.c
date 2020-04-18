@@ -1840,6 +1840,7 @@ static int fts_ts_probe(struct spi_device *spi)
 {
 	int ret = 0;
 	struct fts_ts_data *ts_data = NULL;
+	extern int set_touchpanel_recovery_callback(touchpanel_recovery_cb_p_t cb);
 
 	FTS_INFO("Touch Screen(SPI BUS) driver prboe...");
 	spi->mode = SPI_MODE_1;
@@ -1879,8 +1880,6 @@ static int fts_ts_probe(struct spi_device *spi)
 #endif
 
 	pm_runtime_enable(ts_data->dev);
-
-	extern int set_touchpanel_recovery_callback(touchpanel_recovery_cb_p_t cb);
 
 	FTS_INFO("Touch Screen(SPI BUS) driver prboe successfully");
 	return 0;
