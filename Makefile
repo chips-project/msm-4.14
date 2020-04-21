@@ -717,8 +717,8 @@ else
 ifdef CONFIG_PROFILE_ALL_BRANCHES
 KBUILD_CFLAGS	+= -O2 $(call cc-disable-warning,maybe-uninitialized,)
 else
-KBUILD_CFLAGS   += -O2
 ifeq ($(cc-name),gcc)
+KBUILD_CFLAGS   += -O2
 KBUILD_CFLAGS	+= $(call cc-option, -mcpu=cortex-a73.cortex-a53 -mtune=cortex-a73.cortex-a53)
 endif
 ifeq ($(cc-name),clang)
