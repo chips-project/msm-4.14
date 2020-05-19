@@ -48,6 +48,14 @@
 		qcom,mdss-dsi-reset-sequence = <1 10>, <0 10>, <1 10>;
 		qcom,mdss-pan-physical-width-dimension = <67>;
 		qcom,mdss-pan-physical-height-dimension = <145>;
+		qcom,dsi-supported-dfps-list = <60 55 48>;
+		qcom,mdss-dsi-pan-enable-dynamic-fps;
+		qcom,mdss-dsi-pan-fps-update =
+			"dfps_immediate_porch_mode_vfp";
+		qcom,dsi-dyn-clk-type = "constant-fps-adjust-hfp";
+		qcom,dsi-dyn-clk-enable;
+		qcom,dsi-dyn-clk-list =
+			<1005903360 989138304 993329568 997520832 1001712096>;
 
 		qcom,mdss-dsi-display-timings {
 			timing@0 {
