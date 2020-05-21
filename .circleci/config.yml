@@ -7,7 +7,7 @@ jobs:
       is_test: false
     steps:
       - run: git clone https://github.com/chips-project/msm-4.14 --depth=1 -b pie .
-      - run: echo 'export device="<b>Xiaomi Redmi Note 8</b> (Ginkgo) Android 9.0/Pie"' >> $BASH_ENV
+      - run: echo 'export device="<b>Xiaomi Redmi Note 8/8T</b> (Ginkgo/Willow) Android 9.0/Pie"' >> $BASH_ENV
       - run: wget https://raw.githubusercontent.com/najahiiii/Noob-Script/noob/ci/circle/sendInfo
       - run: chmod +x sendInfo
       - run: bash sendInfo
