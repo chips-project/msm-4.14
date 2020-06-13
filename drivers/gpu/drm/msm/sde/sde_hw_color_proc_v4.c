@@ -12,6 +12,7 @@
  */
 #include <linux/moduleparam.h>
 #include <drm/msm_drm_pp.h>
+#include <dsi_panel.h>
 #include "sde_hw_color_proc_common_v4.h"
 #include "sde_hw_color_proc_v4.h"
 
@@ -22,6 +23,7 @@ static unsigned short kcal_hue = 0;
 static unsigned short kcal_sat = 255;
 static unsigned short kcal_val = 255;
 static unsigned short kcal_cont = 255;
+static unsigned short kcal_def = 230;
 
 module_param(kcal_red, short, 0644);
 module_param(kcal_green, short, 0644);
@@ -253,6 +255,16 @@ void sde_setup_dspp_pccv4(struct sde_hw_dspp *ctx, void *cfg)
 		DRM_ERROR("invalid size of payload len %d exp %zd\n",
 				hw_cfg->len, sizeof(struct drm_msm_pcc));
 		return;
+	}
+
+	// Prevent image retention on nt36672a tianma panel
+	// Keep RGB <= 230 always
+	// Ref: https://forum.xda-developers.com/-/-t4075133
+	if (is_tianma_panel()) {
+		DRM_DEBUG_DRIVER("KCAL: tianma panel detected - limiting RGB to 230\n");
+		kcal_red = kcal_def;
+		kcal_green = kcal_def;
+		kcal_blue = kcal_def;
 	}
 
 	pcc_cfg = hw_cfg->payload;
