@@ -621,8 +621,8 @@ struct ipa_eth_device *ipa_eth_alloc_device(
  */
 void ipa_eth_free_device(struct ipa_eth_device *eth_dev)
 {
-	kzfree(eth_dev->ipa_priv);
-	kzfree(eth_dev);
+	kfree_sensitive(eth_dev->ipa_priv);
+	kfree_sensitive(eth_dev);
 }
 
 /*

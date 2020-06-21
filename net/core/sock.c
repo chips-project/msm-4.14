@@ -1998,7 +1998,7 @@ static inline void __sock_kfree_s(struct sock *sk, void *mem, int size,
 	if (WARN_ON_ONCE(!mem))
 		return;
 	if (nullify)
-		kzfree(mem);
+		kfree_sensitive(mem);
 	else
 		kfree(mem);
 	atomic_sub(size, &sk->sk_omem_alloc);
@@ -2010,11 +2010,11 @@ void sock_kfree_s(struct sock *sk, void *mem, int size)
 }
 EXPORT_SYMBOL(sock_kfree_s);
 
-void sock_kzfree_s(struct sock *sk, void *mem, int size)
+void sock_kfree_sensitive_s(struct sock *sk, void *mem, int size)
 {
 	__sock_kfree_s(sk, mem, size, true);
 }
-EXPORT_SYMBOL(sock_kzfree_s);
+EXPORT_SYMBOL(sock_kfree_sensitive_s);
 
 /* It is almost wait_for_tcp_memory minus release_sock/lock_sock.
    I think, these locks should be removed for datagram sockets.

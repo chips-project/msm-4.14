@@ -396,7 +396,7 @@ static void sde_hdcp_2x_clean(struct sde_hdcp_2x_ctrl *hdcp)
 			list);
 		hdcp2_close_stream(hdcp->hdcp2_ctx,
 			stream_entry->stream_handle);
-		kzfree(stream_entry);
+		kfree_sensitive(stream_entry);
 		hdcp->stream_count--;
 	}
 
@@ -889,7 +889,7 @@ static void sde_hdcp_2x_manage_stream_work(struct kthread_work *work)
 				stream_entry->stream_handle);
 			hdcp->stream_count--;
 			list_del(element);
-			kzfree(stream_entry);
+			kfree_sensitive(stream_entry);
 			query_streams = true;
 		} else if (!stream_entry->stream_handle) {
 			if (hdcp2_open_stream(hdcp->hdcp2_ctx,
@@ -939,7 +939,7 @@ static bool sde_remove_streams(struct sde_hdcp_2x_ctrl *hdcp,
 			/* Stream wasn't fully initialized so remove it */
 			hdcp->stream_count--;
 			list_del(entry);
-			kzfree(stream_entry);
+			kfree_sensitive(stream_entry);
 		} else {
 			stream_entry->active = false;
 		}
@@ -1204,7 +1204,7 @@ int sde_hdcp_2x_register(struct sde_hdcp_2x_register_data *data)
 
 	return 0;
 error:
-	kzfree(hdcp);
+	kfree_sensitive(hdcp);
 	hdcp = NULL;
 unlock:
 	return rc;
@@ -1221,5 +1221,5 @@ void sde_hdcp_2x_deregister(void *data)
 	hdcp2_deinit(hdcp->hdcp2_ctx);
 	hdcp->hdcp2_ctx = NULL;
 	mutex_destroy(&hdcp->wakeup_mutex);
-	kzfree(hdcp);
+	kfree_sensitive(hdcp);
 }

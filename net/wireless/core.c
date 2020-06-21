@@ -1286,7 +1286,7 @@ static int cfg80211_netdev_notifier_call(struct notifier_block *nb,
 			rdev->devlist_generation++;
 			cfg80211_mlme_purge_registrations(wdev);
 #ifdef CONFIG_CFG80211_WEXT
-			kzfree(wdev->wext.keys);
+			kfree_sensitive(wdev->wext.keys);
 #endif
 			flush_work(&wdev->disconnect_wk);
 			cfg80211_cqm_config_free(wdev);

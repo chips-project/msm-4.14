@@ -299,7 +299,7 @@ static void free_master_key(struct fscrypt_master_key *mk)
 {
 	if (mk) {
 		crypto_free_skcipher(mk->mk_ctfm);
-		kzfree(mk);
+		kfree_sensitive(mk);
 	}
 }
 
@@ -623,7 +623,7 @@ out:
 	if (res == -ENOKEY)
 		res = 0;
 	put_crypt_info(crypt_info);
-	kzfree(raw_key);
+	kfree_sensitive(raw_key);
 	return res;
 }
 EXPORT_SYMBOL(fscrypt_get_encryption_info);

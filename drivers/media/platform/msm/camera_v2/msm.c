@@ -89,7 +89,7 @@ static uint32_t gpu_limit;
 			if (node->sd == q_node) {	\
 				__q->len--;				\
 				list_del_init(&node->member);		\
-				kzfree(node);				\
+				kfree_sensitive(node);				\
 				break;					\
 			}						\
 	}							\
@@ -106,7 +106,7 @@ static uint32_t gpu_limit;
 			if (node == q_node) {				\
 				__q->len--;				\
 				list_del_init(&node->member);		\
-				kzfree(node);				\
+				kfree_sensitive(node);				\
 				break;					\
 			}						\
 	}							\
@@ -125,7 +125,7 @@ static uint32_t gpu_limit;
 		if (node) {					\
 			if (&node->member) \
 				list_del_init(&node->member);		\
-			kzfree(node);	\
+			kfree_sensitive(node);	\
 		}	\
 	}	\
 	spin_unlock_irqrestore(&__q->lock, flags);		\
@@ -343,7 +343,7 @@ static void msm_sd_unregister_subdev(struct video_device *vdev)
 	struct v4l2_subdev *sd = video_get_drvdata(vdev);
 
 	sd->devnode = NULL;
-	kzfree(vdev);
+	kfree_sensitive(vdev);
 }
 
 static inline int __msm_sd_register_subdev(struct v4l2_subdev *sd)
@@ -381,7 +381,7 @@ static inline int __msm_sd_register_subdev(struct v4l2_subdev *sd)
 	rc = __video_register_device(vdev, VFL_TYPE_SUBDEV, -1, 1,
 		  sd->owner);
 	if (rc < 0) {
-		kzfree(vdev);
+		kfree_sensitive(vdev);
 		goto clean_up;
 	}
 
@@ -568,7 +568,7 @@ void msm_delete_command_ack_q(unsigned int session_id, unsigned int stream_id)
 
 	spin_lock_irqsave(&(session->command_ack_q.lock), flags);
 	list_del_init(&cmd_ack->list);
-	kzfree(cmd_ack);
+	kfree_sensitive(cmd_ack);
 	session->command_ack_q.len--;
 	spin_unlock_irqrestore(&(session->command_ack_q.lock), flags);
 	mutex_unlock(&session->lock);
@@ -1026,7 +1026,7 @@ int msm_post_event(struct v4l2_event *event, int timeout)
 
 	*event = cmd->event;
 
-	kzfree(cmd);
+	kfree_sensitive(cmd);
 	mutex_unlock(&session->lock);
 	return rc;
 }
@@ -1444,14 +1444,14 @@ register_fail:
 entity_fail:
 	media_device_unregister(msm_v4l2_dev->mdev);
 media_fail:
-	kzfree(msm_v4l2_dev->mdev);
+	kfree_sensitive(msm_v4l2_dev->mdev);
 mdev_fail:
 #endif
 	video_device_release(pvdev->vdev);
 video_fail:
 	kfree(pvdev);
 pvdev_fail:
-	kzfree(msm_v4l2_dev);
+	kfree_sensitive(msm_v4l2_dev);
 probe_end:
 	return rc;
 }

@@ -3574,7 +3574,7 @@ static int sctp_setsockopt_auth_key(struct sock *sk,
 
 	ret = sctp_auth_set_key(ep, asoc, authkey);
 out:
-	kzfree(authkey);
+	kfree_sensitive(authkey);
 	return ret;
 }
 

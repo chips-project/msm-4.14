@@ -643,7 +643,7 @@ static void cbaf_disconnect(struct usb_interface *iface)
 	usb_put_dev(cbaf->usb_dev);
 	kfree(cbaf->buffer);
 	/* paranoia: clean up crypto keys */
-	kzfree(cbaf);
+	kfree_sensitive(cbaf);
 }
 
 static const struct usb_device_id cbaf_id_table[] = {

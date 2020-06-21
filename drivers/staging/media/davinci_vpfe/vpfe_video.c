@@ -556,7 +556,7 @@ static int vpfe_release(struct file *file)
 	file->private_data = NULL;
 	/* Free memory allocated to file handle object */
 	v4l2_fh_del(vfh);
-	kzfree(fh);
+	kfree_sensitive(fh);
 	return 0;
 }
 

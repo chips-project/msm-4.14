@@ -782,7 +782,7 @@ int mdss_hdcp_2x_register(struct mdss_hdcp_2x_register_data *data)
 
 	return 0;
 error:
-	kzfree(hdcp);
+	kfree_sensitive(hdcp);
 	hdcp = NULL;
 unlock:
 	return rc;
@@ -798,5 +798,5 @@ void mdss_hdcp_2x_deregister(void *data)
 	kthread_stop(hdcp->thread);
 	mutex_destroy(&hdcp->wakeup_mutex);
 	hdcp2_deinit(hdcp->hdcp2_ctx);
-	kzfree(hdcp);
+	kfree_sensitive(hdcp);
 }

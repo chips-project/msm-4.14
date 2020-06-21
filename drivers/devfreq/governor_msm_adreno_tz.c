@@ -258,7 +258,7 @@ static int tz_init_ca(struct devfreq_msm_adreno_tz_data *priv)
 			TZ_V2_INIT_CA_ID_64),
 			&desc);
 
-	kzfree(tz_buf);
+	kfree_sensitive(tz_buf);
 
 	return ret;
 }
@@ -292,7 +292,7 @@ static int tz_init(struct devfreq_msm_adreno_tz_data *priv,
 		*version = desc.ret[0];
 		if (!ret)
 			priv->is_64 = true;
-		kzfree(tz_buf);
+		kfree_sensitive(tz_buf);
 	} else
 		ret = -EINVAL;
 
