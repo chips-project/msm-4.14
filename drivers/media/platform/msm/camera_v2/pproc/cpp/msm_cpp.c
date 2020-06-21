@@ -498,7 +498,7 @@ static void msm_cpp_dequeue_buffer_info(struct cpp_device *cpp_dev,
 		pr_err("Error: cannot put the iommu handle back to ion fd\n");
 
 	list_del_init(&buff->entry);
-	kzfree(buff);
+	kfree_sensitive(buff);
 }
 
 static unsigned long msm_cpp_fetch_buffer_info(struct cpp_device *cpp_dev,
@@ -655,7 +655,7 @@ static void msm_cpp_delete_buff_queue(struct cpp_device *cpp_dev)
 				cpp_dev->buff_queue[i].stream_id);
 		}
 	}
-	kzfree(cpp_dev->buff_queue);
+	kfree_sensitive(cpp_dev->buff_queue);
 	cpp_dev->buff_queue = NULL;
 	cpp_dev->num_buffq = 0;
 }

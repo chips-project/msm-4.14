@@ -325,7 +325,7 @@ struct sde_hw_mixer *sde_hw_lm_init(enum sde_lm idx,
 	return c;
 
 blk_init_error:
-	kzfree(c);
+	kfree_sensitive(c);
 
 	return ERR_PTR(rc);
 }

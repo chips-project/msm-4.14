@@ -1009,7 +1009,7 @@ static inline struct ablkcipher_request *ablkcipher_request_alloc(
  */
 static inline void ablkcipher_request_free(struct ablkcipher_request *req)
 {
-	kzfree(req);
+	kfree_sensitive(req);
 }
 
 /**

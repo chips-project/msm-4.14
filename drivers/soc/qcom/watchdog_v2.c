@@ -917,7 +917,7 @@ static int msm_watchdog_probe(struct platform_device *pdev)
 
 	return 0;
 err:
-	kzfree(wdog_dd);
+	kfree_sensitive(wdog_dd);
 	return ret;
 }
 

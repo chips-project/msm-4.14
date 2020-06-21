@@ -1027,7 +1027,7 @@ static int mtk_aes_gcm_setkey(struct crypto_aead *aead, const u8 *key,
 	mtk_aes_write_state_be(ctx->info.state + ctx->keylen, data->hash,
 			       AES_BLOCK_SIZE);
 out:
-	kzfree(data);
+	kfree_sensitive(data);
 	return err;
 }
 

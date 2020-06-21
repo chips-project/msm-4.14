@@ -110,7 +110,7 @@ static int hdmi_hdcp2p2_copy_buf(struct hdmi_hdcp2p2_ctrl *ctrl,
 
 	ctrl->buf_len = data->buf_len;
 
-	kzfree(ctrl->buf);
+	kfree_sensitive(ctrl->buf);
 
 	ctrl->buf = kzalloc(data->buf_len, GFP_KERNEL);
 

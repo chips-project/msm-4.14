@@ -283,13 +283,13 @@ static struct ipa_eth_channel *atl_ipa_request_channel(
 	return channel;
 
 err_buff_mem:
-	kzfree(desc_mem);
+	kfree_sensitive(desc_mem);
 err_desc_mem:
 	atl_fwd_release_ring(ring);
 err_ring:
 err_dir:
 	if (mem_ops)
-		kzfree(mem_ops);
+		kfree_sensitive(mem_ops);
 err_mem_ops:
 	ipa_eth_net_free_channel(channel);
 err_channel:
@@ -305,16 +305,16 @@ static void atl_ipa_release_channel(struct ipa_eth_channel *ch)
 	atl_fwd_release_ring(ring);
 
 	if (mem_ops)
-		kzfree(mem_ops);
+		kfree_sensitive(mem_ops);
 
 	list_for_each_entry_safe(mem, tmp, &ch->desc_mem, mem_list_entry) {
 		list_del(&mem->mem_list_entry);
-		kzfree(mem);
+		kfree_sensitive(mem);
 	}
 
 	list_for_each_entry_safe(mem, tmp, &ch->buff_mem, mem_list_entry) {
 		list_del(&mem->mem_list_entry);
-		kzfree(mem);
+		kfree_sensitive(mem);
 	}
 
 	ipa_eth_net_free_channel(ch);

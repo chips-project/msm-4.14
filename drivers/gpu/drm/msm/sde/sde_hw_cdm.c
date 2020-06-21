@@ -369,7 +369,7 @@ struct sde_hw_cdm *sde_hw_cdm_init(enum sde_cdm idx,
 	return c;
 
 blk_init_error:
-	kzfree(c);
+	kfree_sensitive(c);
 
 	return ERR_PTR(rc);
 }

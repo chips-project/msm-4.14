@@ -321,10 +321,10 @@ static int ipa_eth_ep_init_rx_intf(
 
 static void ipa_eth_ep_deinit_interfaces(struct ipa_eth_device *eth_dev)
 {
-	kzfree(eth_dev->ipa_tx_intf.prop);
+	kfree_sensitive(eth_dev->ipa_tx_intf.prop);
 	memset(&eth_dev->ipa_tx_intf, 0, sizeof(eth_dev->ipa_tx_intf));
 
-	kzfree(eth_dev->ipa_rx_intf.prop);
+	kfree_sensitive(eth_dev->ipa_rx_intf.prop);
 	memset(&eth_dev->ipa_rx_intf, 0, sizeof(eth_dev->ipa_rx_intf));
 
 }

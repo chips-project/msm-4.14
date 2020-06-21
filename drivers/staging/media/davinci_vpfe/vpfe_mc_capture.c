@@ -205,7 +205,7 @@ static void vpfe_disable_clock(struct vpfe_device *vpfe_dev)
 		clk_disable_unprepare(vpfe_dev->clks[i]);
 		clk_put(vpfe_dev->clks[i]);
 	}
-	kzfree(vpfe_dev->clks);
+	kfree_sensitive(vpfe_dev->clks);
 	v4l2_info(vpfe_dev->pdev->driver, "vpfe capture clocks disabled\n");
 }
 
@@ -268,7 +268,7 @@ out:
 		}
 
 	v4l2_err(vpfe_dev->pdev->driver, "Failed to enable clocks\n");
-	kzfree(vpfe_dev->clks);
+	kfree_sensitive(vpfe_dev->clks);
 
 	return ret;
 }
@@ -396,7 +396,7 @@ static int register_i2c_devices(struct vpfe_device *vpfe_dev)
 	return 0;
 
 probe_sd_out:
-	kzfree(vpfe_dev->sd);
+	kfree_sensitive(vpfe_dev->sd);
 
 	return ret;
 }
@@ -671,7 +671,7 @@ static int vpfe_probe(struct platform_device *pdev)
 
 probe_out_entities_unregister:
 	vpfe_unregister_entities(vpfe_dev);
-	kzfree(vpfe_dev->sd);
+	kfree_sensitive(vpfe_dev->sd);
 probe_out_v4l2_unregister:
 	v4l2_device_unregister(&vpfe_dev->v4l2_dev);
 probe_out_media_unregister:
@@ -681,7 +681,7 @@ probe_out_entities_cleanup:
 probe_disable_clock:
 	vpfe_disable_clock(vpfe_dev);
 probe_free_dev_mem:
-	kzfree(vpfe_dev);
+	kfree_sensitive(vpfe_dev);
 
 	return ret;
 }
@@ -695,14 +695,14 @@ static int vpfe_remove(struct platform_device *pdev)
 
 	v4l2_info(pdev->dev.driver, "vpfe_remove\n");
 
-	kzfree(vpfe_dev->sd);
+	kfree_sensitive(vpfe_dev->sd);
 	vpfe_detach_irq(vpfe_dev);
 	vpfe_unregister_entities(vpfe_dev);
 	vpfe_cleanup_modules(vpfe_dev, pdev);
 	v4l2_device_unregister(&vpfe_dev->v4l2_dev);
 	media_device_unregister(&vpfe_dev->media_dev);
 	vpfe_disable_clock(vpfe_dev);
-	kzfree(vpfe_dev);
+	kfree_sensitive(vpfe_dev);
 
 	return 0;
 }

@@ -123,7 +123,7 @@ bool compute_ecdh_secret(const u8 public_key[64], const u8 private_key[32],
 	memcpy(secret, tmp, 32);
 
 free_all:
-	kzfree(buf);
+	kfree_sensitive(buf);
 free_req:
 	kpp_request_free(req);
 free_kpp:
@@ -215,7 +215,7 @@ bool generate_ecdh_keys(u8 public_key[64], u8 private_key[32])
 	memcpy(private_key, tmp, 32);
 
 free_all:
-	kzfree(buf);
+	kfree_sensitive(buf);
 free_req:
 	kpp_request_free(req);
 free_kpp:
