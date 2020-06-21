@@ -557,7 +557,7 @@ struct sde_hw_pingpong *sde_hw_pingpong_init(enum sde_pingpong idx,
 	return c;
 
 blk_init_error:
-	kzfree(c);
+	kfree_sensitive(c);
 
 	return ERR_PTR(rc);
 }

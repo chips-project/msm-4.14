@@ -29,7 +29,7 @@ static void default_key_dtr(struct dm_target *ti)
 
 	if (dkc->dev)
 		dm_put_device(ti, dkc->dev);
-	kzfree(dkc);
+	kfree_sensitive(dkc);
 }
 
 /*

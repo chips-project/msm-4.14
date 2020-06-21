@@ -455,7 +455,7 @@ static void *msm_jpegdma_get_userptr(struct device *alloc_ctx,
 
 	return buf;
 error:
-	kzfree(buf);
+	kfree_sensitive(buf);
 	return ERR_PTR(-ENOMEM);
 }
 
@@ -470,7 +470,7 @@ static void msm_jpegdma_put_userptr(void *buf_priv)
 
 	msm_jpegdma_hw_unmap_buffer(buf_priv);
 
-	kzfree(buf_priv);
+	kfree_sensitive(buf_priv);
 }
 
 /* Videobuf2 memory callbacks. */

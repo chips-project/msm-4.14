@@ -492,7 +492,7 @@ static int __hwahc_dev_set_key(struct wusbhc *wusbhc, u8 port_idx, u32 tkid,
 			port_idx << 8 | iface_no,
 			keyd, keyd_len, USB_CTRL_SET_TIMEOUT);
 
-	kzfree(keyd); /* clear keys etc. */
+	kfree_sensitive(keyd); /* clear keys etc. */
 	return result;
 }
 

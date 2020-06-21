@@ -1114,14 +1114,14 @@ unsigned int get_cprb_fc(struct ica_xcRB *xcRB,
 				atomic_inc_return(&zcrypt_step);
 	ap_msg->private = kmalloc(sizeof(resp_type), GFP_KERNEL);
 	if (!ap_msg->private) {
-		kzfree(ap_msg->message);
+		kfree_sensitive(ap_msg->message);
 		return -ENOMEM;
 	}
 	memcpy(ap_msg->private, &resp_type, sizeof(resp_type));
 	rc = XCRB_msg_to_type6CPRB_msgX(ap_msg, xcRB, func_code, dom);
 	if (rc) {
-		kzfree(ap_msg->message);
-		kzfree(ap_msg->private);
+		kfree_sensitive(ap_msg->message);
+		kfree_sensitive(ap_msg->private);
 	}
 	return rc;
 }
@@ -1151,8 +1151,8 @@ static long zcrypt_msgtype6_send_cprb(struct zcrypt_queue *zq,
 		/* Signal pending. */
 		ap_cancel_message(zq->queue, ap_msg);
 
-	kzfree(ap_msg->message);
-	kzfree(ap_msg->private);
+	kfree_sensitive(ap_msg->message);
+	kfree_sensitive(ap_msg->private);
 	return rc;
 }
 
@@ -1174,14 +1174,14 @@ unsigned int get_ep11cprb_fc(struct ep11_urb *xcrb,
 				atomic_inc_return(&zcrypt_step);
 	ap_msg->private = kmalloc(sizeof(resp_type), GFP_KERNEL);
 	if (!ap_msg->private) {
-		kzfree(ap_msg->message);
+		kfree_sensitive(ap_msg->message);
 		return -ENOMEM;
 	}
 	memcpy(ap_msg->private, &resp_type, sizeof(resp_type));
 	rc = xcrb_msg_to_type6_ep11cprb_msgx(ap_msg, xcrb, func_code);
 	if (rc) {
-		kzfree(ap_msg->message);
-		kzfree(ap_msg->private);
+		kfree_sensitive(ap_msg->message);
+		kfree_sensitive(ap_msg->private);
 	}
 	return rc;
 }
@@ -1258,8 +1258,8 @@ static long zcrypt_msgtype6_send_ep11_cprb(struct zcrypt_queue *zq,
 		/* Signal pending. */
 		ap_cancel_message(zq->queue, ap_msg);
 
-	kzfree(ap_msg->message);
-	kzfree(ap_msg->private);
+	kfree_sensitive(ap_msg->message);
+	kfree_sensitive(ap_msg->private);
 	return rc;
 }
 
@@ -1279,7 +1279,7 @@ unsigned int get_rng_fc(struct ap_message *ap_msg, int *func_code,
 				atomic_inc_return(&zcrypt_step);
 	ap_msg->private = kmalloc(sizeof(resp_type), GFP_KERNEL);
 	if (!ap_msg->private) {
-		kzfree(ap_msg->message);
+		kfree_sensitive(ap_msg->message);
 		return -ENOMEM;
 	}
 	memcpy(ap_msg->private, &resp_type, sizeof(resp_type));
@@ -1325,8 +1325,8 @@ static long zcrypt_msgtype6_rng(struct zcrypt_queue *zq,
 		/* Signal pending. */
 		ap_cancel_message(zq->queue, ap_msg);
 
-	kzfree(ap_msg->message);
-	kzfree(ap_msg->private);
+	kfree_sensitive(ap_msg->message);
+	kfree_sensitive(ap_msg->private);
 	return rc;
 }
 

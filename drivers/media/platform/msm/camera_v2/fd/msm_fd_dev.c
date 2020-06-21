@@ -322,7 +322,7 @@ static void msm_fd_put_userptr(void *buf_priv)
 
 	msm_fd_hw_unmap_buffer(buf_priv);
 
-	kzfree(buf_priv);
+	kfree_sensitive(buf_priv);
 }
 
 /* Videobuf2 memory callbacks. */

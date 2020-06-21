@@ -960,7 +960,7 @@ struct sde_hw_rot *sde_hw_rot_init(enum sde_rot idx,
 	return c;
 
 blk_init_error:
-	kzfree(c);
+	kfree_sensitive(c);
 
 	return ERR_PTR(rc);
 }

@@ -285,7 +285,7 @@ static int qcedev_release(struct inode *inode, struct file *file)
 		pr_err("%s: invalid handle %pK\n",
 					__func__, podev);
 	}
-	kzfree(handle);
+	kfree_sensitive(handle);
 	file->private_data = NULL;
 	if (podev != NULL && podev->platform_support.bus_scale_table != NULL)
 		qcedev_ce_high_bw_req(podev, false);
@@ -716,7 +716,7 @@ static int qcedev_sha_update_max_xfer(struct qcedev_async_req *qcedev_areq,
 	if (user_src && copy_from_user(k_src,
 				(void __user *)user_src,
 				qcedev_areq->sha_op_req.data[0].len)) {
-		kzfree(k_buf_src);
+		kfree_sensitive(k_buf_src);
 		return -EFAULT;
 	}
 	k_src += qcedev_areq->sha_op_req.data[0].len;
@@ -725,7 +725,7 @@ static int qcedev_sha_update_max_xfer(struct qcedev_async_req *qcedev_areq,
 		if (user_src && copy_from_user(k_src,
 					(void __user *)user_src,
 					qcedev_areq->sha_op_req.data[i].len)) {
-			kzfree(k_buf_src);
+			kfree_sensitive(k_buf_src);
 			return -EFAULT;
 		}
 		k_src += qcedev_areq->sha_op_req.data[i].len;
@@ -755,7 +755,7 @@ static int qcedev_sha_update_max_xfer(struct qcedev_async_req *qcedev_areq,
 	handle->sha_ctxt.last_blk = 0;
 	handle->sha_ctxt.first_blk = 0;
 
-	kzfree(k_buf_src);
+	kfree_sensitive(k_buf_src);
 	return err;
 }
 
@@ -862,7 +862,7 @@ static int qcedev_sha_update(struct qcedev_async_req *qcedev_areq,
 		}
 		sreq->entries = saved_req->entries;
 		sreq->data_len = saved_req->data_len;
-		kzfree(saved_req);
+		kfree_sensitive(saved_req);
 	} else
 		err = qcedev_sha_update_max_xfer(qcedev_areq, handle, sg_src);
 
@@ -912,7 +912,7 @@ static int qcedev_sha_final(struct qcedev_async_req *qcedev_areq,
 	handle->sha_ctxt.init_done = false;
 	memset(&handle->sha_ctxt.trailing_buf[0], 0, 64);
 
-	kzfree(k_buf_src);
+	kfree_sensitive(k_buf_src);
 	qcedev_areq->sha_req.sreq.src = NULL;
 	return err;
 }
@@ -950,7 +950,7 @@ static int qcedev_hash_cmac(struct qcedev_async_req *qcedev_areq,
 			(void __user *)qcedev_areq->sha_op_req.data[i].vaddr;
 		if (user_src && copy_from_user(k_src, (void __user *)user_src,
 				qcedev_areq->sha_op_req.data[i].len)) {
-			kzfree(k_buf_src);
+			kfree_sensitive(k_buf_src);
 			return -EFAULT;
 		}
 		k_src += qcedev_areq->sha_op_req.data[i].len;
@@ -963,7 +963,7 @@ static int qcedev_hash_cmac(struct qcedev_async_req *qcedev_areq,
 	handle->sha_ctxt.diglen = qcedev_areq->sha_op_req.diglen;
 	err = submit_req(qcedev_areq, handle);
 
-	kzfree(k_buf_src);
+	kfree_sensitive(k_buf_src);
 	return err;
 }
 
@@ -1074,7 +1074,7 @@ static int qcedev_hmac_get_ohash(struct qcedev_async_req *qcedev_areq,
 	handle->sha_ctxt.last_blk = 0;
 	handle->sha_ctxt.first_blk = 0;
 
-	kzfree(k_src);
+	kfree_sensitive(k_src);
 	qcedev_areq->sha_req.sreq.src = NULL;
 	return err;
 }
@@ -1291,7 +1291,7 @@ static int qcedev_vbuf_ablk_cipher(struct qcedev_async_req *areq,
 
 	saved_req = kmalloc(sizeof(struct qcedev_cipher_op_req), GFP_KERNEL);
 	if (saved_req == NULL) {
-		kzfree(k_buf_src);
+		kfree_sensitive(k_buf_src);
 		return -ENOMEM;
 
 	}
@@ -1319,8 +1319,8 @@ static int qcedev_vbuf_ablk_cipher(struct qcedev_async_req *areq,
 				err = qcedev_vbuf_ablk_cipher_max_xfer(areq,
 						&di, handle, k_align_src);
 				if (err < 0) {
-					kzfree(k_buf_src);
-					kzfree(saved_req);
+					kfree_sensitive(k_buf_src);
+					kfree_sensitive(saved_req);
 					return err;
 				}
 
@@ -1361,8 +1361,8 @@ static int qcedev_vbuf_ablk_cipher(struct qcedev_async_req *areq,
 				err = qcedev_vbuf_ablk_cipher_max_xfer(areq,
 						&di, handle, k_align_src);
 				if (err < 0) {
-					kzfree(k_buf_src);
-					kzfree(saved_req);
+					kfree_sensitive(k_buf_src);
+					kfree_sensitive(saved_req);
 					return err;
 				}
 
@@ -1405,8 +1405,8 @@ static int qcedev_vbuf_ablk_cipher(struct qcedev_async_req *areq,
 	creq->data_len = saved_req->data_len;
 	creq->byteoffset = saved_req->byteoffset;
 
-	kzfree(saved_req);
-	kzfree(k_buf_src);
+	kfree_sensitive(saved_req);
+	kfree_sensitive(k_buf_src);
 	return err;
 
 }

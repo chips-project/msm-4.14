@@ -944,7 +944,7 @@ static void tzdbgfs_exit(struct platform_device *pdev)
 {
 	struct dentry           *dent_dir;
 
-	kzfree(tzdbg.disp_buf);
+	kfree_sensitive(tzdbg.disp_buf);
 	dent_dir = platform_get_drvdata(pdev);
 	debugfs_remove_recursive(dent_dir);
 	if (g_qsee_log)
@@ -1112,9 +1112,9 @@ err:
 
 static int tz_log_remove(struct platform_device *pdev)
 {
-	kzfree(tzdbg.diag_buf);
+	kfree_sensitive(tzdbg.diag_buf);
 	if (tzdbg.hyp_diag_buf)
-		kzfree(tzdbg.hyp_diag_buf);
+		kfree_sensitive(tzdbg.hyp_diag_buf);
 	tzdbgfs_exit(pdev);
 
 	return 0;

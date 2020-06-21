@@ -2021,7 +2021,7 @@ int __init rtac_init(void)
 	rtac_asm_buffer = kzalloc(
 		rtac_cal[ASM_RTAC_CAL].map_data.map_size, GFP_KERNEL);
 	if (rtac_asm_buffer == NULL) {
-		kzfree(rtac_adm_buffer);
+		kfree_sensitive(rtac_adm_buffer);
 		goto nomem;
 	}
 
@@ -2034,8 +2034,8 @@ int __init rtac_init(void)
 	rtac_afe_buffer = kzalloc(
 		rtac_cal[AFE_RTAC_CAL].map_data.map_size, GFP_KERNEL);
 	if (rtac_afe_buffer == NULL) {
-		kzfree(rtac_adm_buffer);
-		kzfree(rtac_asm_buffer);
+		kfree_sensitive(rtac_adm_buffer);
+		kfree_sensitive(rtac_asm_buffer);
 		goto nomem;
 	}
 
@@ -2052,17 +2052,17 @@ int __init rtac_init(void)
 	rtac_voice_buffer = kzalloc(
 		rtac_cal[VOICE_RTAC_CAL].map_data.map_size, GFP_KERNEL);
 	if (rtac_voice_buffer == NULL) {
-		kzfree(rtac_adm_buffer);
-		kzfree(rtac_asm_buffer);
-		kzfree(rtac_afe_buffer);
+		kfree_sensitive(rtac_adm_buffer);
+		kfree_sensitive(rtac_asm_buffer);
+		kfree_sensitive(rtac_afe_buffer);
 		goto nomem;
 	}
 
 	if (misc_register(&rtac_misc) != 0) {
-		kzfree(rtac_adm_buffer);
-		kzfree(rtac_asm_buffer);
-		kzfree(rtac_afe_buffer);
-		kzfree(rtac_voice_buffer);
+		kfree_sensitive(rtac_adm_buffer);
+		kfree_sensitive(rtac_asm_buffer);
+		kfree_sensitive(rtac_afe_buffer);
+		kfree_sensitive(rtac_voice_buffer);
 		goto nomem;
 	}
 
@@ -2074,10 +2074,10 @@ nomem:
 void rtac_exit(void)
 {
 	misc_deregister(&rtac_misc);
-	kzfree(rtac_adm_buffer);
-	kzfree(rtac_asm_buffer);
-	kzfree(rtac_afe_buffer);
-	kzfree(rtac_voice_buffer);
+	kfree_sensitive(rtac_adm_buffer);
+	kfree_sensitive(rtac_asm_buffer);
+	kfree_sensitive(rtac_afe_buffer);
+	kfree_sensitive(rtac_voice_buffer);
 }
 
 MODULE_DESCRIPTION("SoC QDSP6v2 Real-Time Audio Calibration driver");

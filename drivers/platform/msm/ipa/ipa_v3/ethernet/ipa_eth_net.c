@@ -253,7 +253,7 @@ static int __ipa_eth_net_unlink_upper(struct ipa_eth_upper_device *upper_dev)
 	ipa_eth_ep_unregister_upper_interface(upper_dev);
 
 	list_del(&upper_dev->upper_list);
-	kzfree(upper_dev);
+	kfree_sensitive(upper_dev);
 
 	return 0;
 }
@@ -1310,7 +1310,7 @@ void ipa_eth_net_free_channel(struct ipa_eth_channel *channel)
 	if (!list_empty(&channel->desc_mem))
 		ipa_eth_dev_bug(eth_dev, "Buffer memory still in use");
 
-	kzfree(channel);
+	kfree_sensitive(channel);
 }
 EXPORT_SYMBOL(ipa_eth_net_free_channel);
 
