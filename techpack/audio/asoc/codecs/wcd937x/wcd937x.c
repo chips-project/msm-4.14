@@ -12,8 +12,6 @@
  * GNU General Public License for more details.
  */
 /* Add by dyz for wcd9370 debug 20190101*/
-#define LOG_NDEBUG 0
-#define VERY_VERY_VERBOSE_LOGGING
 /* Add end */
 #include <linux/module.h>
 #include <linux/slab.h>
