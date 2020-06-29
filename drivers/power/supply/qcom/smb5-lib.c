@@ -1111,8 +1111,8 @@ static const struct apsd_result *smblib_update_usb_type(struct smb_charger *chg)
 		 */
 		if (!(apsd_result->pst == POWER_SUPPLY_TYPE_USB_FLOAT &&
 			chg->real_charger_type == POWER_SUPPLY_TYPE_USB))
-			chg->real_charger_type = apsd_result->pst;
-			chg->usb_psy_desc.type = apsd_result->pst;
+		chg->real_charger_type = apsd_result->pst;
+		chg->usb_psy_desc.type = apsd_result->pst;
 	}
 
 	smblib_dbg(chg, PR_MISC, "APSD=%s PD=%d QC3P5=%d\n",
@@ -1527,7 +1527,7 @@ int smblib_get_irq_status(struct smb_charger *chg,
 	/* get real time status of pulse skip irq */
 	rc = smblib_read(chg, MISC_PBS_RT_STS_REG, &reg);
 	if (rc < 0)
-		smblib_err(chg, "Couldn't read MISC_PBS_RT_STS_REG rc=%d\n",
+		smblib_dbg(chg, PR_MISC, "Couldn't read MISC_PBS_RT_STS_REG rc=%d\n",
 				rc);
 	else
 		val->intval |= (reg & PULSE_SKIP_IRQ_BIT);
