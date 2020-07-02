@@ -13,6 +13,33 @@
 #include <linux/if_vlan.h>
 
 #include "ipa_eth_i.h"
+#include "ipa_eth_trace.h"
+
+#ifndef IPA_ETH_EP_LOOPBACK
+static int __handle_ipa_receive(struct ipa_eth_channel *ch,
+				struct sk_buff *skb)
+{
+	if (!ch->process_skb) {
+		dev_kfree_skb_any(skb);
+		return NET_RX_DROP;
+	}
+
+	return ch->process_skb(ch, skb);
+}
+#else
+static int __handle_ipa_receive(struct ipa_eth_channel *ch,
+				struct sk_buff *skb)
+{
+	if (ipa_tx_dp(IPA_CLIENT_AQC_ETHERNET_CONS, skb, NULL)) {
+		dev_kfree_skb_any(skb);
+		return NET_RX_DROP;
+	}
+
+	ch->exception_loopback++;
+
+	return NET_RX_SUCCESS;
+}
+#endif
 
 #ifndef IPA_ETH_EP_LOOPBACK
 static int __handle_ipa_receive(struct ipa_eth_channel *ch,
