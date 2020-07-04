@@ -148,5 +148,6 @@ static const char wlan_cfg[] = {
 "arp_ac_category=0\n"
 "gEnableSelfRecovery=1\n"
 "enable_ftopen=0\n"
+"gReportMaxLinkSpeed=2\n"
 "END\n"
 };
