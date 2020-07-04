@@ -162,4 +162,5 @@ static const char wlan_cfg[] = {
 "etsi13_srd_chan_in_master_mode=1\n"
 "gChannelBondingMode24GHz=0\n"
 "g_sta_sap_scc_on_dfs_chan=1\n"
+"gReportMaxLinkSpeed=2\n"
 };
