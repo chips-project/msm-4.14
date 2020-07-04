@@ -2818,9 +2818,6 @@ static int wsa_macro_init(struct snd_soc_codec *codec)
 	snd_soc_dapm_ignore_suspend(dapm, "WSA_AIF_MIX1 Playback");
 	snd_soc_dapm_ignore_suspend(dapm, "WSA_AIF_VI Capture");
 	snd_soc_dapm_ignore_suspend(dapm, "WSA_AIF_ECHO Capture");
-	snd_soc_dapm_ignore_suspend(dapm, "WSA_SPK1 OUT");
-	snd_soc_dapm_ignore_suspend(dapm, "WSA_SPK2 OUT");
-	snd_soc_dapm_ignore_suspend(dapm, "VIINPUT_WSA");
 	snd_soc_dapm_ignore_suspend(dapm, "WSA SRC0_INP");
 	snd_soc_dapm_ignore_suspend(dapm, "WSA_TX DEC0_INP");
 	snd_soc_dapm_ignore_suspend(dapm, "WSA_TX DEC1_INP");
