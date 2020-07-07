@@ -30,7 +30,13 @@ jobs:
         cp out/arch/arm64/boot/dts/qcom/trinket.dtb AnyKernel3/dtb
         cd AnyKernel3
         zip -r9 "${ZIPNAME}" * -x LICENSE README.md "${ZIPNAME}"
-            
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: Chips-${{ github.sha }}
+        path: 'AnyKernel3/*.zip'
+
     - name: Send eet!
       run: curl -F chat_id="$CHAT_ID" -F document=@"AnyKernel3/${ZIPNAME}" -F parse_mode=markdown https://api.telegram.org/bot"$TG_TOKET"/sendDocument
       env:
