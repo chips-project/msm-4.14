@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [ stable/ten ]
+
+jobs:
+  build:
+    runs-on: [ self-hosted, Linux, X64 ]
+
+    steps:
+    - uses: actions/checkout@v2
+        
+    - name: Bake eet!
+      run: |
+        make vendor/chips_defconfig O=out
+        make -j$(nproc) -l$(nproc) O=out CC=clang AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_ARM32=arm-linux-gnueabi-
+      env:
+        ARCH: arm64
+        KBUILD_BUILD_USER: Najahi
+        KBUILD_BUILD_HOST: BrickProt-Devlolper
+
+    - name: Name eet!
+      run: echo "::set-env name=ZIPNAME::Chips-Q-$(date +%Y%m%d)-ginkgo-stable.zip" 
+      
+    - name: Yo pack eet!
+      run: |
+        git clone git://github.com/najahiiii/AnyKernel3.git --branch=ginkgo-ten
+        cp out/arch/arm64/boot/Image.gz AnyKernel3/
+        cp out/arch/arm64/boot/dts/qcom/trinket.dtb AnyKernel3/dtb
+        cd AnyKernel3
+        zip -r9 "${ZIPNAME}" * -x LICENSE README.md "${ZIPNAME}"
+            
+    - name: Send eet!
+      run: curl -F chat_id="$CHAT_ID" -F document=@"AnyKernel3/${ZIPNAME}" -F parse_mode=markdown https://api.telegram.org/bot"$TG_TOKET"/sendDocument
+      env:
+        TG_TOKET: ${{ secrets.TGTOKET }}
+        CHAT_ID:  ${{ secrets.MYID }}
