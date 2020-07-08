@@ -21,24 +21,26 @@ jobs:
         KBUILD_BUILD_HOST: BrickProt-Devlolper
 
     - name: Name eet!
-      run: echo "::set-env name=ZIPNAME::Chips-Q-$(date +%Y%m%d)-ginkgo-stable.zip" 
-      
+      run: |
+        echo "::set-env name=SHORT_HASH::$(git rev-parse --verify --short=10 HEAD)"
+        echo "::set-env name=ZIPNAME::Chips-Q-$(date +%Y%m%d)-ginkgo"
+
     - name: Yo pack eet!
       run: |
         git clone git://github.com/najahiiii/AnyKernel3.git --branch=ginkgo-ten
         cp out/arch/arm64/boot/Image.gz AnyKernel3/
         cp out/arch/arm64/boot/dts/qcom/trinket.dtb AnyKernel3/dtb
         cd AnyKernel3
-        zip -r9 "${ZIPNAME}" * -x LICENSE README.md "${ZIPNAME}"
+        zip -r9 "${ZIPNAME}-${SHORT_HASH}" * -x LICENSE README.md *placeholder *.zip
+
+    - name: Send eet!
+      run: curl -F chat_id="$CHAT_ID" -F document=@"AnyKernel3/${ZIPNAME}-${SHORT_HASH}.zip" -F parse_mode=markdown https://api.telegram.org/bot"$TG_TOKET"/sendDocument
+      env:
+        TG_TOKET: ${{ secrets.TGTOKET }}
+        CHAT_ID:  ${{ secrets.MYID }}
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
-        name: Chips-${{ github.sha }}
+        name: ChipsKernel-Q
         path: 'AnyKernel3/*.zip'
-
-    - name: Send eet!
-      run: curl -F chat_id="$CHAT_ID" -F document=@"AnyKernel3/${ZIPNAME}" -F parse_mode=markdown https://api.telegram.org/bot"$TG_TOKET"/sendDocument
-      env:
-        TG_TOKET: ${{ secrets.TGTOKET }}
-        CHAT_ID:  ${{ secrets.MYID }}
