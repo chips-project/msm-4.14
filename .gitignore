@@ -54,6 +54,10 @@ modules.builtin
 /vmlinuz
 /System.map
 /Module.markers
+/clang-llvm
+/AnyKernel
+/out
+/clang
 
 #
 # RPM spec file (make rpm-pkg)
