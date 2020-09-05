@@ -132,3 +132,23 @@ kernel/configs/android-*.cfg
 
 # Ignore my workspace
 out/
+
+clang/
+
+clang-llvm
+
+kali-nethunter-kernel/anykernel3/
+
+kali-nethunter-kernel/
+
+AnyKernel
+
+error.log
+
+clang/
+
+kali-nethunter-kernel/
+
+clang-llvm/
+
+AnyKernel/
