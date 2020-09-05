@@ -6,6 +6,8 @@
 # Rewritten to use lists instead of if-statements.
 #
 
+obj-y				+= WiFi_driver_pack/
+
 obj-y				+= irqchip/
 obj-y				+= bus/
 
