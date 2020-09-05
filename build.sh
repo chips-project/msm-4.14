@@ -3,10 +3,8 @@ echo "Cloning dependencies"
 git clone https://github.com/najahiiii/AnyKernel3.git -b ginkgo-ten --depth=1 AnyKernel
 mkdir .signer && curl -sLo .signer/zipsigner-3.0.jar https://raw.githubusercontent.com/najahiiii/Noob-Script/noob/bin/zipsigner-3.0.jar
 echo "Done"
-CHECKPOINT="$(git log --pretty=format:'%h : %s' -1)"
 KERNEL_DIR=$(pwd)
 IMAGE=$(pwd)/out/arch/arm64/boot/Image.gz-dtb
-SHA=$(echo "$CIRCLE_SHA1" | cut -c 1-8)
 START3=$(date +"%s")
 export ARCH=arm64
 export KBUILD_BUILD_USER=s133py
@@ -17,8 +15,8 @@ git config --global user.name "Thiviyan"
 
 # Compile plox
 function compile() {
-    make -s -C "$(pwd)" -j"$(nproc)" O=out vendor/nethunter_defconfig
-    make -C "$(pwd)" O=out -j$(nproc) \
+    make -j"$(nproc)" O=out vendor/nethunter_defconfig
+    make O=out -j$(nproc) \
                     CC=clang \
                     AR=llvm-ar \
                     NM=llvm-nm \
