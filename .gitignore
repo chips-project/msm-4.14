@@ -152,3 +152,5 @@ kali-nethunter-kernel/
 clang-llvm/
 
 AnyKernel/
+
+drivers/net/wireless/ath/ath9k-bk/
