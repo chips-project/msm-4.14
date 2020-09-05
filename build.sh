@@ -12,8 +12,6 @@ export ARCH=arm64
 export KBUILD_BUILD_USER=s133py
 export KBUILD_BUILD_HOST=Kali
 export PATH="/mnt/kernels/Violet/msm-4.14/clang-llvm/bin:${PATH}"
-export CCV=$(clang --version | head -n 1 | perl -pe 's/\(git.*?\)//gs' | sed -e 's/  */ /g')
-export LLDV=$(ld.lld --version | head -n1 | perl -pe 's/\(git.*?\)//gs' | sed 's/(compatible with [^)]*)//' | sed 's/[[:space:]]*$//')
 git config --global user.email "thiviyan@gmail.com"
 git config --global user.name "Thiviyan"
 
